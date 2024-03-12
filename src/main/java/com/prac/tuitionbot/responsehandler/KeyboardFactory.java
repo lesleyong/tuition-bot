@@ -17,10 +17,11 @@ public class KeyboardFactory {
         return new ReplyKeyboardMarkup(List.of(row));
     }
 
-    public static ReplyKeyboard getPizzaOrDrinkKeyboard(){
+    public static ReplyKeyboard getMainActions(){
         KeyboardRow row = new KeyboardRow();
-        row.add("Pizza");
-        row.add("Drink");
+        row.add("My Points");
+        row.add("Redemption");
+        row.add("Refer a friend!");
         return new ReplyKeyboardMarkup(List.of(row));
     }
 

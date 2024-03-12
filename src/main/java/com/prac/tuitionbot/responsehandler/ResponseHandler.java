@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static com.prac.tuitionbot.responsehandler.UserState.*;
 import static com.prac.tuitionbot.util.Constants.START_TEXT;
+import static com.prac.tuitionbot.util.Constants.STOP_CHAT;
 
 public class ResponseHandler {
 
@@ -28,7 +29,7 @@ public class ResponseHandler {
         message.setChatId(chatId);
         message.setText(START_TEXT);
         sender.execute(message);
-        chatStates.put(chatId, AWAITING_NAME);
+        chatStates.put(chatId, AWAIT_ACTION);
     }
 
     public void replyToButtons(long chatId, Message message) {
@@ -37,7 +38,7 @@ public class ResponseHandler {
         }
 
         switch (chatStates.get(chatId)) {
-            case AWAITING_NAME -> replyToName(chatId, message);
+            case AWAIT_ACTION -> provideAvailableActions(chatId, message);
             case FOOD_DRINK_SELECTION -> replyToFoodDrinkSelection(chatId, message);
             case PIZZA_TOPPINGS -> replyToPizzaToppings(chatId, message);
             case AWAITING_CONFIRMATION -> replyToOrder(chatId, message);
@@ -48,7 +49,7 @@ public class ResponseHandler {
     private void stopChat(long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        sendMessage.setText("Thank you for your order. See you soon!\nPress /start to order again");
+        sendMessage.setText(STOP_CHAT);
         chatStates.remove(chatId);
         sendMessage.setReplyMarkup(new ReplyKeyboardRemove(true));
         sender.execute(sendMessage);
@@ -61,10 +62,10 @@ public class ResponseHandler {
         sender.execute(sendMessage);
     }
 
-    private void replyToName(long chatId, Message message) {
-        promptWithKeyboardForState(chatId, "Hello " + message.getText() + ". What would you like to have?",
-                KeyboardFactory.getPizzaOrDrinkKeyboard(),
-                FOOD_DRINK_SELECTION);
+    private void provideAvailableActions(long chatId, Message message) {
+        promptWithKeyboardForState(chatId, null,
+                KeyboardFactory.getMainActions(),
+                AWAIT_ACTION);
     }
 
     private void replyToOrder(long chatId, Message message) {
@@ -72,7 +73,7 @@ public class ResponseHandler {
         sendMessage.setChatId(chatId);
         if ("yes".equalsIgnoreCase(message.getText())) {
             sendMessage.setText("We will deliver it soon. Thank you!\nOrder another?");
-            sendMessage.setReplyMarkup(KeyboardFactory.getPizzaOrDrinkKeyboard());
+            sendMessage.setReplyMarkup(KeyboardFactory.getMainActions());
             sender.execute(sendMessage);
             chatStates.put(chatId, FOOD_DRINK_SELECTION);
         } else if ("no".equalsIgnoreCase(message.getText())) {
@@ -105,7 +106,7 @@ public class ResponseHandler {
         sendMessage.setChatId(chatId);
         if ("drink".equalsIgnoreCase(message.getText())) {
             sendMessage.setText("We don't sell drinks.\nBring your own drink!! :)");
-            sendMessage.setReplyMarkup(KeyboardFactory.getPizzaOrDrinkKeyboard());
+            sendMessage.setReplyMarkup(KeyboardFactory.getMainActions());
             sender.execute(sendMessage);
         } else if ("pizza".equalsIgnoreCase(message.getText())) {
             sendMessage.setText("We love Pizza in here.\nSelect the toppings!");
@@ -114,7 +115,7 @@ public class ResponseHandler {
             chatStates.put(chatId, UserState.PIZZA_TOPPINGS);
         } else {
             sendMessage.setText("We don't sell " + message.getText() + ". Please select from the options below.");
-            sendMessage.setReplyMarkup(KeyboardFactory.getPizzaOrDrinkKeyboard());
+            sendMessage.setReplyMarkup(KeyboardFactory.getMainActions());
             sender.execute(sendMessage);
         }
     }

@@ -34,6 +34,7 @@ public class TuitionBot extends AbilityBot {
         return 0;
     }
 
+    // entry point from bot
     public Ability startBot() {
         return Ability
                 .builder()
