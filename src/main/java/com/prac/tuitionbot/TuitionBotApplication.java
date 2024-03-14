@@ -8,6 +8,8 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import static org.apache.http.client.methods.RequestBuilder.post;
+
 @SpringBootApplication
 public class TuitionBotApplication {
 

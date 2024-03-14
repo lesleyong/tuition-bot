@@ -1,5 +1,6 @@
 package com.prac.tuitionbot.responsehandler;
 
+import com.prac.tuitionbot.MainActions;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -10,25 +11,11 @@ public class KeyboardFactory {
 
     private KeyboardFactory() {};
 
-    public static ReplyKeyboard getPizzaToppingsKeyboard() {
-        KeyboardRow row = new KeyboardRow();
-        row.add("Margherita");
-        row.add("Pepperoni");
-        return new ReplyKeyboardMarkup(List.of(row));
-    }
-
     public static ReplyKeyboard getMainActions(){
         KeyboardRow row = new KeyboardRow();
-        row.add("My Points");
-        row.add("Redemption");
-        row.add("Refer a friend!");
-        return new ReplyKeyboardMarkup(List.of(row));
-    }
-
-    public static ReplyKeyboard getYesOrNo() {
-        KeyboardRow row = new KeyboardRow();
-        row.add("Yes");
-        row.add("No");
+        row.add(MainActions.MY_POINTS.getName());
+        row.add(MainActions.REDEMPTION.getName());
+        row.add(MainActions.REFER.getName());
         return new ReplyKeyboardMarkup(List.of(row));
     }
 }
